@@ -2,22 +2,20 @@ name: Daily Security News Briefing
 
 on:
   schedule:
-    - cron: '30 23 * * *'
+    - cron: '17 23 * * *'
   workflow_dispatch:
 
 jobs:
   send-news:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Run Security News Bot
+      - name: Run Bot
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: python news_bot.py
+        run: |
+          test -n "$DISCORD_WEBHOOK_URL"
+          python news_bot.py
